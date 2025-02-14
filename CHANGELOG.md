@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initialized Git Repo
 - Setup Virtual Environment
 - Initialized main file and installed necessary packages
-
+- .gitignore File
 
 
 ## All Release Links
