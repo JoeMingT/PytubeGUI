@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `requirements.txt` file to store all dependencies
+
+
 ### Fixed
 
 ### Changed
@@ -27,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Setup Virtual Environment
 - Initialized main file and installed necessary packages
 - .gitignore File
-
+- pyrightconfig.json File (For Neovim Completion)
 
 ## All Release Links
 
