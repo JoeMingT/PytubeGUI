@@ -11,3 +11,6 @@ class ConfigMenu(ctk.CTkFrame):
         
         self.heading_label = ctk.CTkLabel(self.config_menu_frame, text="Testing", font=self.app.h1)
         self.heading_label.grid(column=0, row=0, columnspan=2, padx=self.app.x_pad, pady=self.app.y_pad)
+
+        print("Hello, world!")
+        print(video_obj.title)

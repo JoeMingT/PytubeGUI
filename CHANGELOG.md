@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `requirements.txt` file to store all dependencies
-- Completed the Graphical User Interface of the Main Menu (doesn't do anything yet)
+- Completed the Graphical User Interface of the Main Menu
+- Navigation from Main Menu to Configuration Menu
 
 ### Fixed
 

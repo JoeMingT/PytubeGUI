@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import traceback
 import threading
 import tkinter as tk
 import pytubefix as pt
@@ -14,6 +15,7 @@ class MainMenu(ctk.CTkFrame):
         self.loading_status = None
         self.yt = None
         self.error_msg = None
+        self.exception = None
         
         # Title
         self.heading_label = ctk.CTkLabel(self, text="PytubeGUI", font=self.app.h1)
@@ -83,13 +85,20 @@ class MainMenu(ctk.CTkFrame):
     def fetch_youtube_data(self):
         self.loading_status = "loading"
         try:
+            print(self.url_input.get())
             self.yt = pt.YouTube(self.url_input.get())
             self.loading_status = "completed"
         except ptexc.RegexMatchError as e:
-            self.error_msg = e
+            self.error_msg = "Please fill in a valid URL!"
+            self.exception = e
+            self.loading_status = "error"
+        except ptexc.VideoUnavailable as e:
+            self.error_msg = "Video Unavailable!"
+            self.exception = e
+            self.loading_status = "error"
         except Exception as e:
-            self.error_msg = e
-        finally:
+            self.error_msg = "Unknown"
+            self.exception = e
             self.loading_status = "error"
 
 
@@ -107,7 +116,10 @@ class MainMenu(ctk.CTkFrame):
             self.navigate_to_config_menu()
         elif self.loading_status == "error":
             self.app.update_widget_attributes(self.convert_button, { "text": "Convert!", "state": "enabled" })
-            self.log_to_main_menu_console(f"Error! {type(self.error_msg).__name__}:\n{self.error_msg}")
+            if self.error_msg == "Unknown":
+                self.log_to_main_menu_console(f"Error! {type(self.exception).__name__}:\n{traceback.format_exception(self.exception)}")
+            else:
+                self.log_to_main_menu_console(f"Error! {type(self.exception).__name__}:\n{self.error_msg}")
 
     def start_fetching_data(self):
         self.app.update_widget_attributes(self.convert_button, { "text": "Loading", "state": "disabled" })
