@@ -5,13 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased] - 18-02-2025
 
 ### Added
 
-- `requirements.txt` file to store all dependencies
-- Completed the Graphical User Interface of the Main Menu
-- Navigation from Main Menu to Configuration Menu
+-
 
 ### Fixed
 
@@ -19,6 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.0.2] - 18-02-2025
+
+### Added
+
+- `requirements.txt` file to store all dependencies
+- Completed the Graphical User Interface of the Main Menu
+- Added Loading Animation to show Progress
+- Added a Console in the Main Menu
+- Added Exception Handling to display error in Console
+- Added the ability to read the input URL and pass it into the Configuration Menu
 
 ## [0.0.1] - 14-02-2025
 
