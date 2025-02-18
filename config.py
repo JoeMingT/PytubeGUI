@@ -10,6 +10,9 @@ _H2_FONT = (_HEADING_FAMILY, 18, "bold")
 _H3_FONT = (_HEADING_FAMILY, 14, "bold")
 _P_FONT = (_PARAGRAPH_FAMILY, 14)
 
+_THEME_FILE_LOCATION = "./themes/lavender.json"
+
+
 def get_curr_screen_geometry():
     """
     Workaround to get the size of the current screen in a multi-screen setup.
