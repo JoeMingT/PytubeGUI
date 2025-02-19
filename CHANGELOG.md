@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--
+- Documentation on some code for Main Menu
 
 ### Fixed
 
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `requirements.txt` file to store all dependencies
-- Completed the Graphical User Interface of the Main Menu
+- Completed the Graphical User Interface of the Main Menu (PO Token and OAuth not working)
 - Added Loading Animation to show Progress
 - Added a Console in the Main Menu
 - Added Exception Handling to display error in Console
