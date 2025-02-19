@@ -1,17 +1,16 @@
 import customtkinter as ctk
-import traceback
 import threading
 import tkinter as tk
 import pytubefix as pt
 from tktooltip import ToolTip
 from PIL import Image
 import pytubefix.exceptions as ptexc
-from widgets.ConfigMenu import ConfigMenu
 
 class MainMenu(ctk.CTkFrame):
     def __init__(self, app):
         super().__init__(app, fg_color="transparent")
         self.app = app
+        # Initialize global variables (to pass between widgets)
         self.loading_status = None
         self.yt = None
         self.error_msg = None
@@ -63,14 +62,21 @@ class MainMenu(ctk.CTkFrame):
                                                 command=lambda: self.start_fetching_data()
                                             )
         self.convert_button.grid(column=0, row=5, padx=self.app.x_pad, pady=20)
-
+        
+        # Console label
         self.console_label = ctk.CTkLabel(self, text="Console", font=self.app.p)
         self.console_label.grid(column=0, row=6, sticky="W")
-        
+        # Console field
         self.console_field = ctk.CTkTextbox(self, wrap="word", width=self.app.app_width//2, height=125, state="disabled")
         self.console_field.grid(column=0, row=7, columnspan=2, sticky="EW")
 
+
     def log_to_main_menu_console(self, message):
+        """Log a message to the GUI's console
+
+        Args:
+            message (string): Message to be logged to the user
+        """
         if message[:-2] != "\n":
             message += "\n"
         self.console_field.configure(state="normal")
@@ -79,6 +85,7 @@ class MainMenu(ctk.CTkFrame):
         self.console_field.configure(state="disabled")
 
     def navigate_to_config_menu(self):
+        """Destroys the main menu and navigate to the configuration menu for the next step"""
         self.app.generate_config_menu(self.yt)
         self.destroy()
 
@@ -103,7 +110,9 @@ class MainMenu(ctk.CTkFrame):
 
 
     def run_loading_animation(self):
-        """Animate the 'Loading...' text with dots."""
+        """Animate the 'Loading...' text with dots. Once loading complete, do the corresponding action (if it succeeded or failed)"""
+        # When the status is loading (meaning pytube is still fetching data from the url provided)
+        # Run the loading animation
         if self.loading_status == "loading":
             current_text = self.convert_button.cget("text")
             if "..." in current_text:
@@ -112,21 +121,25 @@ class MainMenu(ctk.CTkFrame):
                 new_text = current_text + "."
             self.app.update_widget_attributes(self.convert_button, { "text": new_text })
             self.app.after_id = self.app.after(500, lambda: self.run_loading_animation())  # Repeat animation every 500ms 
+        # When it's completed or error, call respective functions
+        # To break recursive
         elif self.loading_status == "completed":
             self.navigate_to_config_menu()
         elif self.loading_status == "error":
             self.app.update_widget_attributes(self.convert_button, { "text": "Convert!", "state": "enabled" })
             if self.error_msg == "Unknown":
-                self.log_to_main_menu_console(f"Error! {type(self.exception).__name__}:\n{traceback.format_exception(self.exception)}")
-            else:
                 self.log_to_main_menu_console(f"Error! {type(self.exception).__name__}:\n{self.error_msg}")
 
     def start_fetching_data(self):
+        """Fetches the data from the provided URL in another thread (so the GUI doesn't freeze and can multitask)"""
+        # Disable the button so there won't be multiple requests
         self.app.update_widget_attributes(self.convert_button, { "text": "Loading", "state": "disabled" })
+        # Start the thread
         pytube_thread = threading.Thread(
             target=self.fetch_youtube_data, 
             args=(),
             daemon=True
         )
         pytube_thread.start()
+        # Start the loading animation at the same time
         self.run_loading_animation()
