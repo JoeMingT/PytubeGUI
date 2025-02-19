@@ -16,6 +16,8 @@ class MainMenu(ctk.CTkFrame):
         self.yt = None
         self.error_msg = None
         self.exception = None
+        # Initializing Image Object
+        self.tooltip_icon = ctk.CTkImage(light_image=Image.open("./assets/images/info_box_black.png"), dark_image=Image.open("./assets/images/info_box_white.png"))
         
         # Title
         self.heading_label = ctk.CTkLabel(self, text="PytubeGUI", font=self.app.h1)
@@ -42,8 +44,6 @@ class MainMenu(ctk.CTkFrame):
         self.po_token_var = tk.StringVar(value="off")
         self.po_token_checkbox = ctk.CTkCheckBox(self, text="Use PO Token?", variable=self.po_token_var, onvalue="on", offvalue="off")
         self.po_token_checkbox.grid(column=0, row=3, padx=self.app.x_pad, pady=self.app.y_pad, sticky="W")
-        # Initializing Image Object
-        self.tooltip_icon = ctk.CTkImage(light_image=Image.open("./assets/images/info_box_black.png"), dark_image=Image.open("./assets/images/info_box_white.png"))
         self.po_token_tooltip = ctk.CTkLabel(self, image=self.tooltip_icon, text="")           # Display image using Label
         # Set tooltip for more info regarding PO Token
         ToolTip(self.po_token_tooltip, msg="PO Token is used in detecting Bots. If you failed converting a video multiple times, you may try switching on this option to avoid getting blocked. (WIP)", delay=0.3, follow=True)
