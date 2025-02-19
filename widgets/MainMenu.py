@@ -5,8 +5,19 @@ import pytubefix as pt
 from tktooltip import ToolTip
 from PIL import Image
 import pytubefix.exceptions as ptexc
+from App import App
 
 class MainMenu(ctk.CTkFrame):
+    """The Main Menu of the application (Home Screen)
+
+    Attributes: 
+        app: widgets.App.App
+        loading_status: str | None 
+        yt: YouTube | None
+        error_msg: str | None
+        exception: Exception | None
+        tooltip_icon: customtkinter.CTkImage
+    """
     def __init__(self, app):
         super().__init__(app, fg_color="transparent")
         self.app = app
