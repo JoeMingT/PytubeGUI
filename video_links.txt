@@ -1,0 +1,48 @@
+# YouTube links for testing purposes, too lazy to open up a tab every time I want to test my app...
+# Tried to include as wide array of different videos to test out for my app as well. These are plain youtube videos.
+##### Rotate among the links so I won't get blocked as a bot.
+
+1. Ed Sheeran - Perfect:
+https://www.youtube.com/watch?v=2Vv-BfVoq4g&pp=ygUSZWQgc2hlZXJhbiBwZXJmZWN0
+
+2. Yoasobi - Idol:
+https://www.youtube.com/watch?v=8iuLXODzL04&pp=ygUHeW9hc29iaQ%3D%3D
+
+3. Skyrim - Dragonborn (Main Theme):
+https://www.youtube.com/watch?v=6fILxnBH1Tg&pp=ygUMc2t5cmltIHRoZW1l
+
+4. Harvard CS50 – Full Computer Science University Course:
+https://www.youtube.com/watch?v=8mAITcNt710
+
+5. The ultimate introduction to Godot 4:
+https://www.youtube.com/watch?v=nAh_Kx5Zh5Q&t=161s&pp=ygUOZ29kb3QgdHV0b3JpYWw%3D
+
+6. Just a rainy day... Relaxing Nintendo video game music to put you in a better mood (w/rain ambience):
+https://www.youtube.com/watch?v=MAsudG24NVM
+
+7. The Legend of Zelda Orchestra Concert [Nintendo Live 2024 TOKYO]:
+https://www.youtube.com/watch?v=xuXHrHRZzLk&pp=ygUddGhlIGxlZ2VuZCBvZiB6ZWxkYSBvcmNoZXN0cmE%3D
+
+8. Main Theme (Full Version) - The Legend of Zelda: Tears of the Kingdom OST:
+https://www.youtube.com/watch?v=FKLHDgbTD0k
+
+9. P5 OST 01 Wake Up, Get Up, Get Out There:
+https://www.youtube.com/watch?v=SmQ1ZXTHNKA&list=PLZuZrScKjWOMAEEBEGTmAGtmmlg6QY7bC
+
+10. Life Will Change:
+https://www.youtube.com/watch?v=dsuJZx24V_A
+
+11. The Witcher 3: Wild Hunt OST - Sword of Destiny - Main Theme:
+https://www.youtube.com/watch?v=viM0-3PXef0
+
+12. DougDoug's AI has the worst ideas ever:
+https://www.youtube.com/watch?v=xi2hqMNk-RM
+
+13. I built an Ai Comedy Bot, but he kept getting depressed: 
+https://www.youtube.com/watch?v=V_fcD2ewqk4&pp=ygUMZG91Z2RvdWdkb3Vn
+
+14. I Got Bribed By Casinos, But I Exposed Them Instead:
+https://www.youtube.com/watch?v=q58dLWjRTBE
+
+15. Main Theme - DAEMON X MACHINA Soundtrack:
+https://www.youtube.com/watch?v=oLiUz4Maqrc&list=PLzTxt5iYdhzifPXw_g0hWp0YgFetgazuv&index=163
