@@ -82,6 +82,12 @@ class MainMenu(ctk.CTkFrame):
         self.console_field = ctk.CTkTextbox(self, wrap="word", width=self.app.app_width//2, height=125, state="disabled")
         self.console_field.grid(column=0, row=7, columnspan=2, sticky="EW")
 
+        # Add some keybindings for smoother input
+        self.convert_button.bind("<Return>", lambda event: self.convert_button.invoke())
+        self.url_input.bind("<Return>", lambda event: self.convert_button.invoke())
+
+        # When startup, focus on the url input field (faster input)
+        self.url_input.focus()
 
     def log_to_main_menu_console(self, message):
         """Log a message to the GUI's console
