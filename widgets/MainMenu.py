@@ -151,6 +151,8 @@ class MainMenu(ctk.CTkFrame):
             self.app.update_widget_attributes(self.convert_button, { "text": "Convert!", "state": "enabled" })
             if self.error_msg == "Unknown":
                 self.log_to_main_menu_console(f"Error! {type(self.exception).__name__}:\n{self.error_msg}")
+            else:
+                self.log_to_main_menu_console(f"Error! {type(self.exception).__name__}:\n{self.error_msg}")
 
 
     def start_fetching_data(self):
