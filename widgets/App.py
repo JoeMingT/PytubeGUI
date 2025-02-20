@@ -36,10 +36,11 @@ class App(ctk.CTk):
         self.menu = MainMenu(self)
         self.menu.pack(padx=20, pady=20, anchor="center")
     
-    def generate_config_menu(self, video_obj):
-        self.menu = ConfigMenu(self, video_obj)
+    def generate_config_menu(self, submitted_info):
+        self.menu = ConfigMenu(self, submitted_info)
         self.menu.pack(padx=20, pady=20, anchor="center")
 
     def update_widget_attributes(self, widget, attributes):
         if widget.winfo_exists():
             widget.configure(**attributes)
+

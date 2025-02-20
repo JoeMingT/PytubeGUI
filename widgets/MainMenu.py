@@ -1,3 +1,4 @@
+from http.client import RemoteDisconnected
 import customtkinter as ctk
 import threading
 import tkinter as tk
@@ -5,7 +6,6 @@ import pytubefix as pt
 from tktooltip import ToolTip
 from PIL import Image
 import pytubefix.exceptions as ptexc
-from App import App
 
 class MainMenu(ctk.CTkFrame):
     """The Main Menu of the application (Home Screen)
@@ -18,6 +18,7 @@ class MainMenu(ctk.CTkFrame):
         exception: Exception | None
         tooltip_icon: customtkinter.CTkImage
     """
+
     def __init__(self, app):
         super().__init__(app, fg_color="transparent")
         self.app = app
@@ -27,7 +28,7 @@ class MainMenu(ctk.CTkFrame):
         self.error_msg = None
         self.exception = None
         # Initializing Image Object
-        self.tooltip_icon = ctk.CTkImage(light_image=Image.open("./assets/images/info_box_black.png"), dark_image=Image.open("./assets/images/info_box_white.png"))
+        self.tooltip_icon = ctk.CTkImage(light_image=Image.open("./assets/images/info_box_black.png"), dark_image=Image.open("./assets/images/info_box_white.png"), size=(15,15))
         
         # Title
         self.heading_label = ctk.CTkLabel(self, text="PytubeGUI", font=self.app.h1)
@@ -97,14 +98,20 @@ class MainMenu(ctk.CTkFrame):
 
     def navigate_to_config_menu(self):
         """Destroys the main menu and navigate to the configuration menu for the next step"""
-        self.app.generate_config_menu(self.yt)
         self.destroy()
+        self.app.generate_config_menu({
+            "yt": self.yt,
+            "type": "video" if self.convert_type_var.get() == 1 else "audio"
+        })
 
     def fetch_youtube_data(self):
+        """Fetch the data of the provided YouTube URL and handles any exception that occurrs"""
         self.loading_status = "loading"
         try:
-            print(self.url_input.get())
             self.yt = pt.YouTube(self.url_input.get())
+            ## Access the object so it loads fully
+            self.yt.title
+            self.yt.length
             self.loading_status = "completed"
         except ptexc.RegexMatchError as e:
             self.error_msg = "Please fill in a valid URL!"
@@ -112,6 +119,10 @@ class MainMenu(ctk.CTkFrame):
             self.loading_status = "error"
         except ptexc.VideoUnavailable as e:
             self.error_msg = "Video Unavailable!"
+            self.exception = e
+            self.loading_status = "error"
+        except RemoteDisconnected as e:
+            self.error_msg = "Network Unstable and Disconnected! Try again!"
             self.exception = e
             self.loading_status = "error"
         except Exception as e:
@@ -140,6 +151,7 @@ class MainMenu(ctk.CTkFrame):
             self.app.update_widget_attributes(self.convert_button, { "text": "Convert!", "state": "enabled" })
             if self.error_msg == "Unknown":
                 self.log_to_main_menu_console(f"Error! {type(self.exception).__name__}:\n{self.error_msg}")
+
 
     def start_fetching_data(self):
         """Fetches the data from the provided URL in another thread (so the GUI doesn't freeze and can multitask)"""
