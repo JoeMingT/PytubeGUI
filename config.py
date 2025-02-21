@@ -1,7 +1,7 @@
 import tkinter as tk
 
 _DEFAULT_PAD_X = 10
-_DEFAULT_PAD_Y = 10
+_DEFAULT_PAD_Y = 5
 
 _HEADING_FAMILY = "Ubuntu"
 _PARAGRAPH_FAMILY = "Arial"
