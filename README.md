@@ -20,7 +20,7 @@ When using this software, please be mindful of the rules and regulations of copy
 ### Running the Application
 
 ## Roadmap
-- [ ] Accept a YouTube URL link and display relevant information
+- [X] Accept a YouTube URL link and display relevant information
 - [ ] Convert the YouTube URL provided into video and audio files (depending on user choice)
 - [ ] Provide Ability to cancel or pause downloads
 - [ ] Provide ability to download multiple videos at once
@@ -29,6 +29,7 @@ When using this software, please be mindful of the rules and regulations of copy
 - [ ] Add in PO Token to bypass bot checking (when needed)
 - [ ] Add in OAuth integration for age-restricted content (add a warning that it may get you banned)
 - [ ] Further add in more output choices for the user (Captions, Chapters, Key Moments)
+- [ ] Some persistent memory (for saving settings info or something)
 
 ## Screenshots
 
