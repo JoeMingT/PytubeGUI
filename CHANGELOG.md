@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Documentation on some code for Main Menu
+- Display the details of the Video onto a Configuration Menu
+- Added Exception Handling for disconnects while fetching data
+- Display a form to configure the output in the Configuration Menu
 
 ### Fixed
 
