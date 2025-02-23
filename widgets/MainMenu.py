@@ -19,8 +19,8 @@ class MainMenu(ctk.CTkFrame):
         tooltip_icon: customtkinter.CTkImage
     """
 
-    def __init__(self, app):
-        super().__init__(app, fg_color="transparent")
+    def __init__(self, app, *args, **kwargs):
+        super().__init__(app, fg_color="transparent", *args, **kwargs)
         self.app = app
         # Initialize global variables (to pass between widgets)
         self.loading_status = None
@@ -104,10 +104,11 @@ class MainMenu(ctk.CTkFrame):
 
     def navigate_to_config_menu(self):
         """Destroys the main menu and navigate to the configuration menu for the next step"""
-        self.destroy()
+        self.pack_forget()  # Hide the window only, call it when Configuration menu is destroyed
         self.app.generate_config_menu({
             "yt": self.yt,
-            "type": "video" if self.convert_type_var.get() == 1 else "audio"
+            "type": "video" if self.convert_type_var.get() == 1 else "audio",
+            "main_menu": self
         })
 
     def fetch_youtube_data(self):
@@ -147,14 +148,15 @@ class MainMenu(ctk.CTkFrame):
                 new_text = "Loading"
             else:
                 new_text = current_text + "."
-            self.app.update_widget_attributes(self.convert_button, { "text": new_text })
+            self.convert_button.configure(text=new_text)
             self.app.after_id = self.app.after(500, lambda: self.run_loading_animation())  # Repeat animation every 500ms 
         # When it's completed or error, call respective functions
         # To break recursive
         elif self.loading_status == "completed":
+            self.convert_button.configure(text="Convert!", state="enabled")
             self.navigate_to_config_menu()
         elif self.loading_status == "error":
-            self.app.update_widget_attributes(self.convert_button, { "text": "Convert!", "state": "enabled" })
+            self.convert_button.configure(text="Convert!", state="enabled")
             if self.error_msg == "Unknown":
                 self.log_to_main_menu_console(f"Error! {type(self.exception).__name__}:\n{self.error_msg}")
             else:
@@ -164,7 +166,7 @@ class MainMenu(ctk.CTkFrame):
     def start_fetching_data(self):
         """Fetches the data from the provided URL in another thread (so the GUI doesn't freeze and can multitask)"""
         # Disable the button so there won't be multiple requests
-        self.app.update_widget_attributes(self.convert_button, { "text": "Loading", "state": "disabled" })
+        self.convert_button.configure(text="Loading", state="disabled")
         # Start the thread
         pytube_thread = threading.Thread(
             target=self.fetch_youtube_data, 

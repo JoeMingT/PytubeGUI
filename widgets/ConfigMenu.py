@@ -1,20 +1,21 @@
 import customtkinter as ctk
-import pytubefix as pt
+import threading
 import tkinter as tk
 from tkinter import filedialog
 import os
 from datetime import timedelta
-from customtkinter.windows.widgets import image
 import requests
 from io import BytesIO
 from PIL import Image
+from widgets import DownloadWindow
 
 class ConfigMenu(ctk.CTkFrame):
-    def __init__(self, app, submitted_info):
-        super().__init__(app, fg_color="transparent")
+    def __init__(self, app, submitted_info, *args, **kwargs):
+        super().__init__(app, fg_color="transparent", *args, **kwargs)
         self.app = app
         self.yt = submitted_info["yt"]
         self.convert_type = submitted_info["type"]
+        self.main_menu = submitted_info["main_menu"]
         self.streams = self.yt.streams.filter(only_audio=True) if self.convert_type == "audio" else self.yt.streams.filter(only_video=True)
         self.resolution_options = []
         self.format_and_get_resolution()
@@ -75,7 +76,7 @@ class ConfigMenu(ctk.CTkFrame):
         === Metadata ===
         X. Year
         X. Tags / Genre
-        X. Track Number
+        X. Track Number (Quite similar to indexing, but this one is specifically metadata only, while Indexing is added to the file name / output itself)
         X. Album (Playlist things, so maybe need to check)
         """
         # Frame to contain all the configuration option
@@ -121,7 +122,7 @@ class ConfigMenu(ctk.CTkFrame):
         self.choose_loc_btn.grid(column=1, row=0, sticky="W", padx=self.app.x_pad//2)
 
         # Download Button
-        self.download_button = ctk.CTkButton(self.options_frame, text="Download!", font=self.app.h3)
+        self.download_button = ctk.CTkButton(self.options_frame, text="Download!", font=self.app.h3, command=lambda: self.download_btn_clicked())
         self.download_button.grid(column=0, row=3, sticky="W", padx=self.app.x_pad, pady=self.app.y_pad)
 
         self.back_button = ctk.CTkButton(self.options_frame, 
@@ -136,22 +137,22 @@ class ConfigMenu(ctk.CTkFrame):
                                          )
         self.back_button.grid(column=1, row=3, sticky="W", padx=self.app.x_pad, pady=self.app.y_pad)
 
-# secondary_button_styles = {
-#     "fg_color": ["#E5E5E5", "#444B50"],  # Soft gray in light mode, darker gray in dark mode
-#     "hover_color": ["#D3D3D3", "#62686D"],  # Slightly darker gray when hovered
-#     "border_color": ["#A98BC6", "#8A6BBE"],  # Lavender border for subtle contrast
-#     "text_color": ["#5A4B81", "#DCE4EE"],  # Dark lavender text in light mode, off-white in dark mode
-#     "text_color_disabled": ["gray60", "gray50"]  # Softer grays for disabled state
-# }
+        """
+        Verification (prerequisite) before downloading video:
+        1. Storage Space
+        2. Title is not empty, No forbidden characters (special characters, other than a few)
+        3. Download Location is not empty, a valid path, and a valid format
+        """
 
     def truncate_text(self, text):
-        """Truncate a text that's too long
+        """Truncate a text that's too long.
 
         Args:
-            text (str): The text that should be truncated
+            text (str): The text that should be truncated.
 
         Returns:
-            The truncated text or the original text if it doesn't exceed a limit """
+            The truncated text or the original text if it doesn't exceed a limit. 
+        """
         if len(text) > 30:
             truncated_text = text[:30]
             truncated_text = truncated_text[:-3] + "..."
@@ -161,10 +162,10 @@ class ConfigMenu(ctk.CTkFrame):
 
 
     def format_duration(self, duration):
-        """Format the duration of the video (which is in seconds) into a proper format
+        """Format the duration of the video (which is in seconds) into a proper format.
 
         Args:
-            duration (int): Duration of the video in seconds
+            duration (int): Duration of the video in seconds.
         """
         time_obj = timedelta(seconds=duration)
         
@@ -180,6 +181,7 @@ class ConfigMenu(ctk.CTkFrame):
             return f"{minutes:02}:{seconds:02}"
 
     def format_and_get_resolution(self):
+        """Formats all the filtered streams from the YouTube object. Appends all the available resolutions, formatted, into a list for dropdown box use."""
         for i in range(len(self.streams)):
             stream = self.streams[i]
             if self.convert_type == "audio":
@@ -188,10 +190,10 @@ class ConfigMenu(ctk.CTkFrame):
                 self.resolution_options.append(f"{i+1}- {stream.resolution}, {stream.video_codec}")
 
     def get_download_folder_location(self):
-        """Get the default download location of the user's computer machine
+        """Get the default download location of the user's computer machine.
 
         Returns:
-            The path to the default Download path
+            The path to the default Download path.
         """
         # Windows
         if os.name == "nt":  
@@ -202,22 +204,51 @@ class ConfigMenu(ctk.CTkFrame):
 
 
     def query_download_destination(self):
+        """Query where the user wants to save the output to. Display a window to select folder."""
         selected_dir = filedialog.askdirectory()
         if selected_dir:
             self.download_loc_var.set(selected_dir)
 
 
     def update_file_size(self, current_choice):
+        """Update the file size of the selected resolution.
+
+        Args:
+            current_choice (str): The currently selected choice (returned as an event from CTkComboBox)
+        """
         option_index = int(current_choice.split("-")[0])-1
         self.video_size_var.set(f"Size: {self.streams[option_index].filesize_mb:.2f}MB")
 
-
-    def start_downloading(self):
-        # May pass it into a new menu so that the user can keep track of it
+    def download_video(self):
+        # Will have to see how this would work if we are working with playlists
         pass
 
 
-    def return_to_main_menu(self):
-        """Return to the main menu (In case of misinput or miscopied)"""
+    def download_btn_clicked(self):
+        # May pass it into a new menu so that the user 
+        # will have a progress bar and allow for multiple download going on at once
+        # Thread starts here, then destroy this menu (either back to Main Menu with a new Download Menu popup or a dedicated Download Menu)
+        download_thread = threading.Thread(target=lambda: self.download_video(), daemon=True, args=())
+        download_thread.start()
+        self.redirect_to_main_menu()
+
+    def generate_download_window(self):
+        # Check if there's a Download Window created already or not.
+        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+            self.toplevel_window = DownloadWindow(self.app, configuration_info={
+
+            })
+        else:
+            self.toplevel_window.focus()
+
+    def redirect_to_main_menu(self):
+        """Return to the main menu with cleared input. This function is called when clicked on the 'Download' button. Makes it easier to start the next download."""
+        self.main_menu.destroy()
         self.destroy()
         self.app.generate_main_menu()
+        
+
+    def return_to_main_menu(self):
+        """Return to the main menu with initial input. This function is called when clicked on the 'Back' button."""
+        self.main_menu.pack()
+        self.destroy()
