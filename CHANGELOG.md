@@ -5,20 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 18-02-2025
+## [unreleased] - 24-02-2025
 
 ### Added
 
-- Documentation on some code for Main Menu
-- Display the details of the Video onto a Configuration Menu
-- Added Exception Handling for disconnects while fetching data
-- Display a form to configure the output in the Configuration Menu
+
 
 ### Fixed
 
 ### Changed
 
+- Dropdowns only display resolution options instead of resolution and codec option
+
 ### Removed
+
+
+## [0.0.3] - 24-02-2025
+
+### Added
+
+- Documentation on some code for Main Menu
+- Documentation on some code for Configuration Menu
+- Display the details of the Video onto a Configuration Menu
+- Added Exception Handling for disconnects while fetching data
+- Display a form to configure the output in the Configuration Menu
+- Able to download video and audio
+- Added test files and test data for easier testing
+- Initialized a new download window that will show progress and download history when completed
+
+### Removed
+
+- Removed barely used global functions and variables
+
 
 ## [0.0.2] - 18-02-2025
 
@@ -30,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a Console in the Main Menu
 - Added Exception Handling to display error in Console
 - Added the ability to read the input URL and pass it into the Configuration Menu
+
 
 ## [0.0.1] - 14-02-2025
 

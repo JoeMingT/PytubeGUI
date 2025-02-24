@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import threading
+import pytubefix
 import tkinter as tk
 from tkinter import filedialog
 import os
@@ -7,7 +8,7 @@ from datetime import timedelta
 import requests
 from io import BytesIO
 from PIL import Image
-from widgets import DownloadWindow
+from widgets.DownloadWindow import DownloadWindow
 
 class ConfigMenu(ctk.CTkFrame):
     def __init__(self, app, submitted_info, *args, **kwargs):
@@ -16,6 +17,7 @@ class ConfigMenu(ctk.CTkFrame):
         self.yt = submitted_info["yt"]
         self.convert_type = submitted_info["type"]
         self.main_menu = submitted_info["main_menu"]
+        self.download_window = None
         self.streams = self.yt.streams.filter(only_audio=True) if self.convert_type == "audio" else self.yt.streams.filter(only_video=True)
         self.resolution_options = []
         self.format_and_get_resolution()
@@ -174,11 +176,11 @@ class ConfigMenu(ctk.CTkFrame):
         minutes, seconds = divmod(remainder, 60)
 
         if days > 0:
-            return f"{days}d {hours:02}:{minutes:02}:{seconds:02}"
+            return f"{days}d {hours:02}h:{minutes:02}m:{seconds:02}s"
         elif hours > 0:
-            return f"{hours:02}:{minutes:02}:{seconds:02}"
+            return f"{hours:02}h:{minutes:02}m:{seconds:02}s"
         else:
-            return f"{minutes:02}:{seconds:02}"
+            return f"{minutes:02}m:{seconds:02}s"
 
     def format_and_get_resolution(self):
         """Formats all the filtered streams from the YouTube object. Appends all the available resolutions, formatted, into a list for dropdown box use."""
@@ -221,7 +223,12 @@ class ConfigMenu(ctk.CTkFrame):
 
     def download_video(self):
         # Will have to see how this would work if we are working with playlists
-        pass
+        option_index = int(self.resolution_var.get().split("-")[0])-1
+        selected_stream = self.streams[option_index]
+        selected_stream.download(
+            output_path=self.download_loc_var.get(),
+            filename=f"{self.title_var.get()}.{selected_stream.subtype}"
+        )
 
 
     def download_btn_clicked(self):
@@ -230,16 +237,17 @@ class ConfigMenu(ctk.CTkFrame):
         # Thread starts here, then destroy this menu (either back to Main Menu with a new Download Menu popup or a dedicated Download Menu)
         download_thread = threading.Thread(target=lambda: self.download_video(), daemon=True, args=())
         download_thread.start()
+        self.generate_download_window()
         self.redirect_to_main_menu()
 
     def generate_download_window(self):
         # Check if there's a Download Window created already or not.
-        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-            self.toplevel_window = DownloadWindow(self.app, configuration_info={
+        if self.download_window is None or not self.download_window.winfo_exists():
+            self.download_window = DownloadWindow(self.app, configuration_info={
 
             })
         else:
-            self.toplevel_window.focus()
+            self.download_window.focus()
 
     def redirect_to_main_menu(self):
         """Return to the main menu with cleared input. This function is called when clicked on the 'Download' button. Makes it easier to start the next download."""

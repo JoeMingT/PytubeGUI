@@ -6,5 +6,7 @@ class DownloadWindow(ctk.CTkToplevel):
         self.app = app
         self.geometry("400x300")
 
-
+        self.title_label = ctk.CTkLabel(self, text="Downloads", font=self.app.h1)
+        self.title_label.grid(column=0, row=0, columnspan=2)
+        
 

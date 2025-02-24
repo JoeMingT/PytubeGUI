@@ -21,7 +21,7 @@ When using this software, please be mindful of the rules and regulations of copy
 
 ## Roadmap
 - [X] Accept a YouTube URL link and display relevant information
-- [ ] Convert the YouTube URL provided into video and audio files (depending on user choice)
+- [X] Convert the YouTube URL provided into video and audio files (depending on user choice)
 - [ ] Display download progress and output
 - [ ] Provide Ability to cancel or pause downloads
 - [ ] Provide ability to download multiple videos at once

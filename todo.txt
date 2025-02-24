@@ -1,0 +1,3 @@
+1. Change the dropdown to resolution based, and fetch data based on resolution instead (Because people don't really understand the difference of codecs anyways)
+2. Fix Audio output to .mp3 files and Video output to .mp4 files respectively
+3. Show progress bar
